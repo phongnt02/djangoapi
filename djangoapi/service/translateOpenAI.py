@@ -2,9 +2,9 @@ import os
 from openai import AzureOpenAI
 from dotenv import load_dotenv
 
+load_dotenv()
 class OpenAIService:
     def __init__(self):
-        load_dotenv('../../.env')
         self.api_key = os.getenv('AZURE_OPENAI_KEY')
         self.endpoint = os.getenv('AZURE_OPENAI_ENDPOINT')
 
@@ -28,9 +28,3 @@ class OpenAIService:
             temperature=1
         )
         return response.choices[0].message.content
-
-    def translate_jp(self, result):
-        return self.translate(result, 'Japanese', 'japanese')
-
-    def translate_vn(self, result):
-        return self.translate(result, 'Vietnam', 'Vietnamese')

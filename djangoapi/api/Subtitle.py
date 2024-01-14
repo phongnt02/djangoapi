@@ -8,7 +8,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.views.decorators.csrf import csrf_exempt
 from django.http import FileResponse
+from django.http import HttpResponse
 from tempfile import NamedTemporaryFile
+from ..service.translateOpenAI import OpenAIService
 
 class Subtitle(APIView):
     @csrf_exempt
@@ -104,3 +106,18 @@ class Subtitle(APIView):
     def format_time(self, milliseconds):
         # Chuyển đổi giá trị thời gian từ milliseconds sang định dạng HH:MM:SS.SSS
         return str(datetime.timedelta(milliseconds=milliseconds))
+
+
+class Translate(APIView):
+    @csrf_exempt
+    def post(self, request):
+        language = request.POST.get('lang')
+        webvtt_content = request.POST.get('webvtt')
+
+        translate_service = OpenAIService()
+        translated_content = translate_service.translate(webvtt_content, language, language)
+
+        response = HttpResponse(translated_content, content_type='text/vtt')
+        response['Content-Disposition'] = 'attachment; filename="translated_subtitle.vtt"'
+        
+        return response
