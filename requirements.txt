@@ -1,0 +1,9 @@
+openai
+python-dotenv
+django
+djangorestframework
+git+https://github.com/openai/whisper.git
+imageio[ffmpeg]
+requests
+httpx
+pysrt
